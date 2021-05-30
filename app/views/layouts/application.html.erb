@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AwesomeAnswersMarch202</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_pack_tag "application", media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application' %>
+    <%# 
+      above 👆 we are including the JavaScript code in the app.
+      javascript_pack_tag is a helper method that's provided by
+      webpacker. This is equivalent to javascript_link_tag from
+      assett pipeline.
+      The javascript_pack_tag takes care of making sure that
+      it references compiled assets properly in devlopment mode
+      as well as in production mode similar to the assets pipeline.
+     %>
+  </head>
+
+  <body>
+    <%= render 'shared/navbar' %>
+    <div class='container'>
+    <%# flash is a hash(ruby object) available in all views. Here we're looping hash and display its contents %>
+    <%# Just to show user that things are happening %>
+      <% flash.each do |type, message| %>
+        <div class='bg-<%= type %> p-3 rounded mb-2 shadow-sm'>
+          <%= message %>
+        </div>
+      <% end %>
+    <%# render method will be replaced by the template at the provided path %>
+      <%= yield %>
+    </div>
+  </body>
+</html>

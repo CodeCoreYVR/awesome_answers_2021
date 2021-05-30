@@ -1,0 +1,114 @@
+<div class='shadow-sm p-3 mb-5 bg-white rounded overflow-wrap'>
+  <h1>
+    <span class='badge badge-pill badge-info'>
+      <%= @question.id %>
+    </span>
+    <%= @question.title %>
+  </h1>
+  <p class='shadow-none p-3 mb-5 bg-light rounded'><%= @question.body %></p>
+  <p>
+  <div class="tags">Tags: <%= @question.tags.map(&:name).join(", ") %></div>
+  <%# 
+    leEquivant to:
+    @question.tags.map { |t| t.name }.join(", ")
+   %>
+  </p>
+  <p class='text-muted'><%= @question.user.first_name %> <%= @question.user.last_name %></p>
+  <%# link_to arguments: name, path, options_object %>
+  <small>Liked by: <%= @question.likes.count %></small>
+  <small>
+    <% if @like.present? %>
+      <%= link_to(
+          "Unlike",
+          like_path(@like),
+          method: :delete
+        )
+      %>
+    <% else %>
+      <%= link_to(
+          "Like",
+          question_likes_path(@question),
+          method: :post
+        )
+      %>
+    <% end %>
+  </small>
+  <% if can? :crud, @question %>
+  <div>
+    <%= link_to(
+      "Edit",
+      edit_question_path(@question),
+      class: 'btn btn-info'
+    )
+    %>
+    <%= link_to(
+      "Delete",
+      question_path(@question),
+      method: :delete,
+      class: 'btn btn-danger',
+      data: { confirm: 'are you sure?' }
+    )
+    %>
+  </div>
+  <% end %>
+</div>
+
+<%#
+  To create a form for a resource (i.e. a model), use the form_with
+  helper instead of the form_tag. Its usual arguments are:
+  - A named arg. model which is assigned an instance of a model
+  (e.g. a new question)
+  - A named arg. local which will prevent the form from submitting 
+  its data using AJAX.
+  - A block that is passed the form object wherein we build 
+  the HTML inside the form (e.g. labels, inputs, submisssion buttons, etc)
+  All data from the input fields a form built with this will have its 
+  name-value nested in a hash named after the class of the passed in model. 
+  (e.g. <input name="question[title]"> => { "question": {title: "What is your title?" }})
+%>
+
+<%= form_with(model: [@question, @answer], local: true) do |f| %>
+  <% if @answer.errors.full_messages.each do |msg| %>
+    <ul>
+      <li class="text-danger"><%= msg %></li>
+    </ul>
+    <% end %>
+  <% end %>
+  <div class="form-group">
+    <%= f.text_area(
+      :body,
+      cols: 50,
+      rows: 5,
+      placeholder: "What are you thoughts?",
+      class: "form-control"
+    ) %>
+  </div>
+  <%= f.submit "Answer", class: "btn-primary" %>
+<% end %>
+
+<ul class="list-group answer-list">
+  <% @answers.each do |answer| %>
+    <li class="list-group-item">
+      <p>
+        <%= answer.body %><br />
+        <% if can? :crud, answer %>
+        <small>
+          <%= link_to(
+            "Delete",
+            question_answer_path(@question, answer),
+            method: :delete, 
+            data: {
+              confirm: "Are you sure?"
+            },
+            class: 'btn btn-danger btn-sm',
+          ) %>
+        </small>
+        |
+        <% end %>
+        <small>
+          Answered <%= time_ago_in_words(answer.created_at) %> By <%= answer.user.first_name %> <%= answer.user.last_name %>
+        </small>
+      </p>
+    </li>
+  <% end %>
+</ul>

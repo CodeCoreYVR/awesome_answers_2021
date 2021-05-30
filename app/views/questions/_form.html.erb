@@ -1,0 +1,55 @@
+<% if @question.errors.present? %>
+  <p>
+    <%= @question.errors.full_messages.join(', ')%>
+  </p>
+<% end %>
+
+<%# by default rails forms will submit using XHR/AJAX we'll learn this in the future but for now we want to submit using HTML5 forms so we'll have to set the `local` option to true%>
+<%# https://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-form_with %>
+<%= form_with model: @question, local:true do |f| %>
+  <div class='form-group'>
+    <%= f.label :title %>
+    <%= f.text_field(:title, class: 'form-control')%>
+  </div>
+  <div class='form-group'>
+    <%= f.label :body %>
+    <%= f.text_area(:body, class: 'form-control', cols: 50, rows: 5)%>
+  </div>
+  <%# <div class='tag-container'> %>
+    <%#= f.collection_check_boxes :tag_ids, Tag.order(name: :asc), :id, :name do |t| %>
+      <%# <div class="tag-wrapper"> %>
+        <%#= t.check_box %>
+        <%#= t.text.humanize %>
+      <%# </div> %>
+    <%# end %>
+  <%# </div> %>
+
+    <%= f.label :tag_names %>
+    <%= f.text_field :tag_names %>
+  <%= f.submit "Submit", class: 'btn btn-primary' %>
+<% end %>
+
+<%# selectize docs:
+https://github.com/selectize/selectize.js/blob/master/docs/usage.md
+%>
+
+<script>
+$(function() {
+	$('#question_tag_names').selectize({
+    delimeter: ',', 
+    persist: false, 
+    labelField: 'name',
+    valueField: 'name',
+    searchField: 'name',
+    options: <%= Tag.select(:name).to_json(except: [:id]).html_safe %>,
+    // The above line selects only names from Tag table and converts them to a json array of objects
+    // without including ids and makes sure its a safe_html string
+    // options: [{"name": "firstTag"}, {"name": "secondTag"}, {"name": "thirdTag"}, {"name": "fourthTag"}, {"name": "fifthTag"}]
+    create: function(input) {
+      return {
+        name: input
+      }
+    }
+  });
+});
+</script>

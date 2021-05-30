@@ -1,0 +1,3 @@
+# you should have a file called api_keys.rb with the following information
+ENV["EMAIL_USERNAME"] = "something@gmail.com"
+ENV["EMAIL_PASSWORD"] = "yoursupersecret"

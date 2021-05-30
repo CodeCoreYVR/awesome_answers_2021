@@ -1,0 +1,24 @@
+<% if @tag.present? %>
+  <h2>Showing questions tagged by: <span class="badge badge-pill badge-primary"><%= @tag.name %></span></h2>
+<% else %>
+<h1>Questions Index Page</h1>
+<% end %>
+<div class='row'>
+  <div class='col-2'>
+  </div>
+
+  <div class='col-10'>
+    <%= render 'list' %>
+
+    <%# link_to just creates a `a tag` with the correct href. the below is equivalent to the above code %>
+    <% if false %>
+      <% @questions.each do |question| %>
+        <a href="/questions/<%= question.id %>">
+          <li class='list-group-item'>
+            <p><%= question.id %> <%= question.title%></p>
+          </li>
+        </a>
+      <% end %>
+    <% end %>
+  </div>
+</div>

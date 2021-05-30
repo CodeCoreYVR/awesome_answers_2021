@@ -1,0 +1,12 @@
+Hi, <%= @question_owner.first_name %>
+
+<%= @answer.user.first_name %> answered your question titled:
+<%= @question.title %>
+
+The answer is:
+<%= @answer.body %>
+
+Find your question at: <%= question_url(@question) %>
+
+Cheers,
+Awesome Answers Team

@@ -1,0 +1,24 @@
+<% if @user.errors.present? %>
+  <p>
+    <%= @user.errors.full_messages.join(', ')%>
+  </p>
+<% end %>
+<div>
+  <%= image_tag @user.avatar.variant(resize: '500X500') if @user.avatar.attached? %>
+</div>
+<%= form_with model: @user, local:true do |f| %>
+  <div class='form-group'>
+    <%= f.label :current_password %>
+    <%= f.password_field(:current_password, class: 'form-control')%>
+  </div>
+  <div class='form-group'>
+    <%= f.label :new_password %>
+    <%= f.password_field(:new_password, class: 'form-control')%>
+  </div>
+  <div class='form-group'>
+    <%= f.label :new_password_confirmation %>
+    <%= f.password_field(:new_password_confirmation, class: 'form-control')%>
+  </div>
+
+  <%= f.submit "Update Password", class: 'btn btn-primary' %>
+<% end %>

@@ -1,0 +1,13 @@
+<ul>
+  <% @questions.each do |question| %>
+    <%# if you pass a instance to link_to it will create the href='/questions/:id' %>
+    <%= link_to question do %>
+      <li class='list-group-item'>
+        <p><%= question.id %> <%= question.title %></p>
+        <% if question.answers_count %>
+          <small>Answers count: <%= question.answers_count %></small>
+        <% end %>
+      </li>
+    <% end %>
+  <% end %>
+</ul>
