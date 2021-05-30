@@ -40,6 +40,7 @@ gem 'active_model_serializers'
 gem 'rack-cors'
 gem 'mini_magick'
 # gems listed above here are considered production gems. These should gems that are core to your application
+gem 'omniauth-github', '~> 1.4'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
