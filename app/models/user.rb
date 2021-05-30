@@ -37,7 +37,32 @@ class User < ApplicationRecord
   has_many :answers
   has_many :job_posts, dependent: :nullify
 
-  validates(:email, presence: true, uniqueness: true, format: /\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i)
+  # validates(:email, presence: true, uniqueness: true, format: /\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i)
+
+  validates(:email, presence: true, uniqueness: true, format: /\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i, unless: :from_oauth?)
+
+  def from_oauth?
+    uid.present? && provider.present?
+  end
+
+  def self.create_from_oauth(oauth_data)
+    name = oauth_data["info"]["name"]&.split || 	oauth_data["info"]["nickname"]
+    self.create(
+    first_name: name[0],
+    last_name: name[1] || "",
+    uid: oauth_data["uid"],
+    provider: oauth_data["provider"],
+    oauth_raw_data: oauth_data,
+    password: SecureRandom.hex(32)
+    )
+  end
+
+  def self.find_by_oauth(oauth_data)
+    self.find_by(
+      uid: oauth_data["uid"],
+      provider: oauth_data["provider"]
+    )
+  end
 
   has_one_attached :avatar
   def full_name 

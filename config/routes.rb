@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   # if you want to see the routes & helpers you have drawn out visit http://localhost:3000/rails/info/routes
 
+  get "/auth/github", as: :sign_in_with_github
+  get "auth/:provider/callback", to: "callbacks#index"
+  
   # get("/questions", to: "questions#index")
   # get("/questions/new", to: "questions#new", as: :new_question) #adding a `as: :new_question` option to the route will change the helper path name. This is to adhere to rails convention
   # post("/questions", to: "questions#create")

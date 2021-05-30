@@ -15,6 +15,7 @@
       <%= current_user.first_name %> <%= current_user.last_name %>
     <% else %>
       <%= link_to "Log In", new_session_path, class: 'btn btn-success'%>
+      <%=  link_to  "Sign in with Github",  sign_in_with_github_path  %>
     <% end %>
   </div>
 </nav>
